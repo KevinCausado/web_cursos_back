@@ -1,13 +1,13 @@
-const { Schema } = require("mongoose");
-const mongoose = require ('mongoose')
+const mongoose = require ('mongoose');
+const {Schema} = require ('mongoose');
 
-const courseSchema = new Schema(
-  {
-    name: String,
-  },
-  {
-    timestamps: true,
-  }
+const courseSchema = new Schema ({
+  name: String
+},
+{
+  timestamps: true
+}
+
 );
 
-module.exports = mongoose.model ('course', courseSchema)
+module.exports = mongoose.model ('course',courseSchema);
