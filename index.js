@@ -31,3 +31,12 @@ app.post("/courses", async (req, res) => {
     res.status(400).json({ ok: false, error });
   }
 });
+
+app.get("/courses", async (req, res) => {
+  try {
+    const courses  = await course.find();
+    res.status(200).json({ ok: true, data: courses });
+  } catch (error) {
+    res.status(404).json({ ok: false, error });
+  }
+});
