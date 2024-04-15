@@ -14,13 +14,18 @@ app.get("/", () => {
 
 mongoose.connect(process.env.MONGO_DB_URL).then(() => {
   console.log("Conectado a la base de datos");
+  
   app.listen(PORT, async () => {
     console.log(`Escuchando puerto en ${PORT}`);
   });
 });
 
+
 app.post("/courses", async (req, res) => {
   const { name } = req.body;
+  if (name === undefined) {
+    res.status(500).json({ ok: false, error: "Debe enviar un name" });
+  }
 
   try {
     await course.create({
