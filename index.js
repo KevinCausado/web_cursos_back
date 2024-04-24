@@ -2,46 +2,38 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT;
-const course = require("./models/course");
 const mongoose = require("mongoose");
+const PORT = process.env.PORT;
+const router = require ('./routes');
+const cors = require ('cors');
 
-app.use(express.json());
+mongoose
+  .connect(process.env.MONGO_DB_URL)
+  .then(() => {
+    console.log("Conectado a la base de datos");
 
-app.get("/", () => {
-  console.log("testing");
-});
-
-mongoose.connect(process.env.MONGO_DB_URL).then(() => {
-  console.log("Conectado a la base de datos");
-  
-  app.listen(PORT, async () => {
-    console.log(`Escuchando puerto en ${PORT}`);
-  });
-});
-
-
-app.post("/courses", async (req, res) => {
-  const { name } = req.body;
-  if (name === undefined) {
-    res.status(500).json({ ok: false, error: "Debe enviar un name" });
-  }
-
-  try {
-    await course.create({
-      name,
+    app.listen(process.env.PORT, () => {
+      console.log(`Escuchando en puerto: ${PORT}`);
     });
-    res.status(201).json({ ok: true });
-  } catch (error) {
-    res.status(400).json({ ok: false, error });
-  }
-});
+  })
+  .catch((err) => {
+    console.log(`Error al conectarse: ${err.message}`);
+  });
 
-app.get("/courses", async (req, res) => {
-  try {
-    const courses  = await course.find();
-    res.status(200).json({ ok: true, data: courses });
-  } catch (error) {
-    res.status(404).json({ ok: false, error });
+//CORS
+  const corsOptions = {
+    origin:'http://localhost:3000',
+    optionSuccessStatus:200
   }
-});
+
+  app.use(cors(corsOptions));
+
+
+  //Midleware
+  app.use(express.json());
+
+  //Rutas
+  app.use('/api',router);
+  
+
+ 

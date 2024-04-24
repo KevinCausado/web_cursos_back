@@ -1,9 +1,12 @@
 const mongoose = require("mongoose");
-const { Schema } = require("mongoose");
 
-const courseSchema = new Schema(
+
+const courseSchema = mongoose.Schema(
   {
-    name: String,
+    name: {
+      type:String,
+      required:true,
+    },
     thumbnail: String,
     videos: [{ title: String, videoUrl: String , duration : String}],
   },
